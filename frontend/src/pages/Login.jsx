@@ -6,18 +6,35 @@ export default function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
+    setError('');
     
-    // Simulate authentication delay
-    setTimeout(() => {
+    try {
+      const response = await fetch('http://localhost:3001/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        navigate('/dashboard');
+      } else {
+        setError(data.message || 'Invalid credentials');
+      }
+    } catch (err) {
+      setError('Network error. Please try again later.');
+    } finally {
       setLoading(false);
-      // For simulation phase, accept any credentials and redirect to dashboard
-      navigate('/dashboard');
-    }, 1200);
+    }
   };
 
   return (
@@ -58,6 +75,12 @@ export default function Login() {
             <h2 className="text-4xl font-bold text-white mb-4">Operator Login</h2>
             <p className="text-slate-400 text-lg">Access the Smart Warehouse Control Panel</p>
           </div>
+
+          {error && (
+            <div className="mb-6 p-4 bg-red-500/10 border border-red-500/50 rounded-xl text-red-400 text-sm">
+              {error}
+            </div>
+          )}
 
           <form onSubmit={handleLogin} className="space-y-6">
             
@@ -113,7 +136,7 @@ export default function Login() {
           </form>
 
           <p className="mt-8 text-center text-sm text-slate-500 bg-slate-900/30 p-4 rounded-xl border border-white/5">
-            * Phase 1 Simulation accepts any credentials for testing purposes.
+            Use authorized operator credentials to access the system.
           </p>
         </div>
       </div>

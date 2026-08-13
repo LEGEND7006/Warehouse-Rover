@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const { generatePath } = require('./utils/pathfinder');
+require('dotenv').config();
+
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -8,6 +10,17 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// Authentication Endpoint
+app.post('/api/auth/login', (req, res) => {
+  const { username, password } = req.body;
+  
+  if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+    return res.status(200).json({ success: true, message: 'Authentication successful' });
+  } else {
+    return res.status(401).json({ success: false, message: 'Invalid credentials' });
+  }
+});
 
 // API Endpoint for generating path
 app.post('/api/path', (req, res) => {

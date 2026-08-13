@@ -16,10 +16,10 @@ export default function Dashboard() {
       <div className="flex-1 p-4 lg:p-8 overflow-y-auto">
         <div className="max-w-7xl mx-auto h-full flex flex-col gap-6">
           
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-[600px]">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 flex-1 min-h-0">
             
             {/* Left Column: Grid */}
-            <div className="lg:col-span-2 flex flex-col">
+            <div className="lg:col-span-2 flex flex-col h-[500px] lg:h-[650px]">
               <WarehouseGrid 
                 currentPosition={simulation.currentPosition}
                 destination={simulation.destination}
@@ -31,7 +31,7 @@ export default function Dashboard() {
             </div>
             
             {/* Right Column: Controls and Logs */}
-            <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-6 min-h-0 lg:h-[650px]">
               
               <div className="flex-none">
                 <ControlPanel 
@@ -44,7 +44,7 @@ export default function Dashboard() {
                 />
               </div>
 
-              <div className="flex-1 min-h-[300px]">
+              <div className="flex-1 min-h-0 flex flex-col">
                 <ActivityLog logs={simulation.logs} />
               </div>
 
